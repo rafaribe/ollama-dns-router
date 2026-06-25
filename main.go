@@ -152,7 +152,8 @@ func main() {
 	}
 
 	if availableInstance == "" {
-		logger.Fatal("no available instances found")
+		logger.Warn("no available instances found, skipping DNS update")
+		return
 	}
 
 	if err := dnsManager.createDNSRecord(
@@ -161,7 +162,8 @@ func main() {
 		settings.Provider.Pihole.APIKey,
 		settings.OllamaRecord,
 	); err != nil {
-		logger.Fatal("failed to create DNS record", zap.Error(err))
+		logger.Error("failed to create DNS record", zap.Error(err))
+		return
 	}
 
 	logger.Info("Exiting")
